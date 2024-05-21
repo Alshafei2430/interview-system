@@ -1,0 +1,34 @@
+{
+  "version": "6",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1716226082462,
+      "tag": "0000_opposite_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1716228223372,
+      "tag": "0001_slimy_microbe",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1716228512873,
+      "tag": "0002_low_lorna_dane",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1716242899428,
+      "tag": "0003_lyrical_shooting_star",
+      "breakpoints": true
+    }
+  ]
+}
