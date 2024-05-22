@@ -33,16 +33,16 @@ passport.use(
         .select()
         .from(user)
         .where(eq(user.username, username))
-        .then((users) => users[0]);
+        .then((result) => result[0]);
       if (!findUser) {
-        done(USER_NOT_FOUND);
+        return done(USER_NOT_FOUND);
       }
       if (!comparePassword(password, findUser.hashedPassword)) {
-        done(WRONG_PASSWORD);
+        return done(WRONG_PASSWORD);
       }
-      done(null, findUser);
+      return done(null, findUser);
     } catch (err) {
-      done(err);
+      return done(err);
     }
   })
 );

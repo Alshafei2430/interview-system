@@ -19,15 +19,23 @@ router.post(
     failureMessage: true,
   }),
   (request, response) => {
-    console.log('inside "/api/auth"');
-    response.sendStatus(200);
+    response.send({
+      user: {
+        username: request?.user?.username,
+        role: request?.user?.role,
+      },
+    });
   }
 );
 
 router.get("/status", (request, response) => {
-  console.log(request.user);
   return request.user
-    ? response.send(request.user)
+    ? response.send({
+        user: {
+          username: request?.user.username,
+          role: request?.user.role,
+        },
+      })
     : response.sendStatus(UNAUTHORIZED.statusCode);
 });
 
@@ -48,7 +56,7 @@ router.post("/logout", (request, response) => {
  * then a new user record is inserted into the database.  If the record is
  * successfully created, the user is logged in.
  */
-router.post("/register", async function (req, res, next) {
+router.post("/signup", async function (req, res, next) {
   const { username, password, role } = req.body;
   if (!username || !password || !role) {
     return next(MISSING_REQUIRED_FIELDS);
@@ -70,8 +78,14 @@ router.post("/register", async function (req, res, next) {
         hashedPassword,
         role: req.body.role,
       })
-      .returning();
-    res.send({ userCreated });
+      .returning()
+      .then((result) => result[0]);
+    res.send({
+      user: {
+        username: userCreated.username,
+        role: userCreated.role,
+      },
+    });
   } catch (err) {
     next(INTERNAL_SERVER_ERROR);
   }
