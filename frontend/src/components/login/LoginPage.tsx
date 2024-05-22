@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -32,6 +32,7 @@ export const LoginPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast } = useToast();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,6 +49,10 @@ export const LoginPage = () => {
 
     auth.signIn(values, () => {
       navigate(from, { replace: true });
+      toast({
+        color: "#ffc400",
+        title: "تم تسجيل الدخول بنجاح",
+      });
     });
   }
   return (
