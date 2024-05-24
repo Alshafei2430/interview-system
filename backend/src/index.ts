@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
+import helmet, { crossOriginOpenerPolicy } from "helmet";
 import morgan from "morgan";
 import passport from "passport";
 import session from "express-session";
@@ -16,16 +16,15 @@ import type { Request, Response } from "express";
 
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
+import {
+  ipInternetRegex,
+  ipItnozomRegex,
+  ipLocalHostRegex,
+  testApiClient,
+} from "./constants/allowed-domains";
 
-const PORT = process.env.PORT;
-
-// Regular expression to match loclahost
-const ipLocalHostRegex = /^http:\/\/localhost(:\d+)?$/;
-// Regular expression to match IPs from 192.168.1.x
-const ipInternetRegex = /^http:\/\/192\.168\.1\.\d+(:\d+)?$/;
-// Regular expression to match IPs from 128.6.1.x
-const ipItnozomRegex = /^http:\/\/128\.6\.1\.\d+(:\d+)?$/;
-const testApiClient = "https://hoppscotch.io";
+const host = process.env.HOST;
+const port = process.env.PORT;
 
 app.use(
   cors({
@@ -58,6 +57,12 @@ app.use(routes);
 app.use(errorHandler);
 app.use(notFoundHandler);
 
-httpServer.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
+httpServer.listen(
+  {
+    host,
+    port,
+  },
+  () => {
+    console.log(`Listening on ${host}:${port}`);
+  }
+);

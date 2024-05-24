@@ -1,16 +1,16 @@
-import { Separator } from "../ui/separator";
+import { Appointment } from "@/types";
 import { AppointmentItem } from "./AppointmentItem";
 
-export const AppointmentList = () => {
+interface AppointmentListProps {
+  appointments: Appointment[];
+}
+
+export const AppointmentList = ({ appointments }: AppointmentListProps) => {
   return (
     <div className="m-8 flex flex-col">
-      <AppointmentItem />
-      {/* <Separator /> */}
-      <AppointmentItem />
-      <AppointmentItem />
-      <AppointmentItem />
-      <AppointmentItem />
-      <AppointmentItem />
+      {appointments.map((appointment) => (
+        <AppointmentItem key={appointment.id} appointment={appointment} />
+      ))}
     </div>
   );
 };

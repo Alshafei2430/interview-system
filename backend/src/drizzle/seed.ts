@@ -1,9 +1,6 @@
-import { user } from "./schema";
-
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-
-console.log(".env", process.env.DATABASE_URL);
+import { user } from "./schema";
 
 const sql = postgres(process.env.DATABASE_URL as string, { max: 1 });
 
@@ -13,14 +10,14 @@ const main = async () => {
   try {
     await db.insert(user).values([
       {
-        username: "shafei",
-        hashedPassword: "password",
-        role: "leader",
+        username: "admin",
+        hashedPassword: "admin",
+        role: 0,
       },
       {
-        username: "shafei2",
-        hashedPassword: "password2",
-        role: "secretary",
+        username: "leader2",
+        hashedPassword: "leader2",
+        role: 1,
       },
     ]);
 

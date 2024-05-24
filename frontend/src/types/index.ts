@@ -16,3 +16,17 @@ export interface UserSignUpCredentials {
   password: string;
   role: number;
 }
+
+export type AppointmentStatusType = "accept" | "reject" | "suspend" | "default";
+
+export interface Appointment {
+  id: string;
+  guestName: string;
+  arriveDate: Date;
+  enterDate: Date;
+  status?: AppointmentStatusType;
+  leaderId: string;
+  secretaryId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

@@ -1,15 +1,11 @@
 import { NavBar } from "@/components/NavBar";
-import { useAuth } from "@/hooks/useAuth";
+import { CreateAppointmentDialog } from "@/components/appointment/CreateAppointmentDialog";
 import { Outlet } from "react-router-dom";
 
 export default function Root() {
-  const auth = useAuth();
-  console.log(auth.user);
-
-  auth.getAuthStatus();
-
   return (
     <div className="h-screen">
+      <CreateAppointmentDialog />
       <NavBar />
       <Outlet />
     </div>

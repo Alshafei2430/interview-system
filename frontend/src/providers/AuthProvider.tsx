@@ -1,39 +1,46 @@
-import React, { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import auth from "../api/auth";
 import { User, UserSignInCredentials } from "../types";
 import axios from "@/axios";
 import { Loader } from "../components/Loader";
-
+import { getSocket } from "@/socket";
+import { useConnection } from "../hooks/useConnection";
 interface AuthContextType {
   user: User | null;
   signIn: (
     userCredentials: UserSignInCredentials,
     callback: VoidFunction
   ) => void;
-  getAuthStatus: () => Promise<
-    | {
-        isAuthenticated: boolean;
-        message: string;
-        data: any;
-      }
-    | {
-        isAuthenticated: boolean;
-        message: any;
-        data?: undefined;
-      }
-  >;
-  //   signout: (callback: VoidFunction) => void;
 }
 
-export const AuthContext = React.createContext<AuthContextType>(null!);
+export const AuthContext = createContext<AuthContextType>(null!);
 
 export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = React.useState<User | null>(null);
+  const { changeConnectionStatus } = useConnection();
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const socket = getSocket();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get("auth/status");
+        setUser(response.data.user);
+        socket.connect();
+        changeConnectionStatus(true);
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [socket, changeConnectionStatus]);
 
   const signIn = async (
     userCredentials: UserSignInCredentials,
@@ -45,44 +52,13 @@ export default function AuthProvider({
       console.log(response);
       return;
     }
+    socket.connect();
+    changeConnectionStatus(true);
     setUser(response.data.user);
     callback();
   };
 
-  const getAuthStatus = async () => {
-    const response = await auth.authStatus();
-
-    if (!response.isAuthenticated) {
-      console.log(response);
-    }
-
-    return response;
-  };
-
-  //   const signout = (callback: VoidFunction) => {
-  //     return auth.signout(() => {
-  //       setUser(null);
-  //       callback();
-  //     });
-  //   };
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get("auth/status");
-        console.log({ response });
-        setUser(response.data.user);
-      } catch (error) {
-        // setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  const value = { user, signIn, getAuthStatus };
+  const value = { user, signIn };
 
   return (
     <AuthContext.Provider value={value}>

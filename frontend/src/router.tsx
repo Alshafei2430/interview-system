@@ -6,14 +6,13 @@ import { RequireAuth } from "./components/RequireAuth";
 import Home from "./routes/home";
 import { AdminDashboard } from "./components/admin-dashboard/AdminDashboard";
 import Unauthorized from "./routes/unauthorized";
-import { ACCESS_ROLES } from "./components/constants";
+import { ACCESS_ROLES } from "./constants";
 
 export const router = createBrowserRouter([
   {
     errorElement: <ErrorPage />,
     children: [
       {
-        element: <Root />,
         children: [
           {
             element: (
@@ -23,8 +22,13 @@ export const router = createBrowserRouter([
             ),
             children: [
               {
-                path: "/",
-                element: <Home />,
+                element: <Root />,
+                children: [
+                  {
+                    path: "/",
+                    element: <Home />,
+                  },
+                ],
               },
             ],
           },

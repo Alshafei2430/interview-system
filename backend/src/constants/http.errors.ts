@@ -6,9 +6,17 @@ export const MISSING_REQUIRED_FIELDS = {
   statusCode: 422,
   message: "Missing Required Fields",
 };
-export const USER_ALREADY_EXISTS = {
+export const ADMIN_ALREADY_EXISTS = {
   statusCode: 409,
-  message: "User Already Exists",
+  message: "Admin Already Exists",
+};
+export const LEADER_ALREADY_EXISTS = {
+  statusCode: 409,
+  message: "Leader Already Exists",
+};
+export const SECRETARY_ALREADY_EXISTS = {
+  statusCode: 409,
+  message: "Secretary Already Exists",
 };
 export const NOT_FOUND = {
   statusCode: 404,

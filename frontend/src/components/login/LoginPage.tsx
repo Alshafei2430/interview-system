@@ -45,7 +45,6 @@ export const LoginPage = () => {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     const from = location.state?.from?.pathname || "/";
-    console.log({ from });
 
     auth.signIn(values, () => {
       navigate(from, { replace: true });
